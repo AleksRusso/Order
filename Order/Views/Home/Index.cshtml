@@ -1,0 +1,71 @@
+﻿@model OrderModel
+
+
+<p>
+    <a asp-action="Create" asp-controller="Order" class="btn btn-primary">Добавить заказ</a>
+</p>
+
+
+<form asp-controller="Home" asp-action="Filter" method="post">
+
+    <select asp-for="Number" class="form-control" id="number" multiple="multiple">
+        <option value="" selected disabled>Номер заказа</option>
+        @foreach (var numberFilter in Model.NumberFilters)
+        {
+            <option value="@numberFilter">@numberFilter</option>
+        }
+    </select>
+    <br />
+    <select asp-for="Providers" class="form-control" id="providers" multiple="multiple">
+        <option value="" selected disabled>Поставщики</option>
+        @foreach (var providerFilter in Model.ProviderFilters)
+        {
+            <option value="@providerFilter">@providerFilter</option>
+        }
+
+    </select>
+    <br />
+    <div class="form-group">
+        <label for="fromDate">Дата от:</label>
+        <input type="date" asp-for="FromDate" class="form-control" id="fromDate" value="@Model.FromDate?.ToString("yyyy-MM-dd")" pattern="\d{4}-\d{2}-\d{2}">
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="toDate">Дата до:</label>
+        <input type="date" asp-for="ToDate" class="form-control" id="toDate" value="@Model.ToDate?.ToString("yyyy-MM-dd")" pattern="\d{4}-\d{2}-\d{2}" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Применить фильтр</button>
+</form>
+<br />
+
+
+<h2>Список заказов</h2>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер заказа</th>
+            <th>Дата</th>
+            <th>Поставщик</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <form asp-action="CreateOrderItem" asp-controller="OrderItem" asp-route-id="@order.Id" class="btn btn-primary">
+            <tr>
+                <td><a asp-action="Show" asp-controller="OrderItem" asp-route-id="@order.Id">@order.Number</a></td>
+                <td>@order.Date.ToString("dd.MM.yyyy")</td>
+                <td>@order.Provider.Name</td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Добавить новый элемент</button>
+                </td>
+            </tr>
+            </form>
+        }
+    </tbody>
+</table>
