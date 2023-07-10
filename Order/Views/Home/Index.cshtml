@@ -56,16 +56,14 @@
     <tbody>
         @foreach (var order in Model.Orders)
         {
-            <form asp-action="CreateOrderItem" asp-controller="OrderItem" asp-route-id="@order.Id" class="btn btn-primary">
-            <tr>
+           <tr>
                 <td><a asp-action="Show" asp-controller="OrderItem" asp-route-id="@order.Id">@order.Number</a></td>
                 <td>@order.Date.ToString("dd.MM.yyyy")</td>
                 <td>@order.Provider.Name</td>
                 <td>
-                    <button type="submit" class="btn btn-primary">Добавить новый элемент</button>
+                    <a asp-action="CreateOrderItem" asp-controller="OrderItem" asp-route-orderid="@order.Id">Добавить новый элемент</a>
                 </td>
             </tr>
-            </form>
         }
     </tbody>
 </table>

@@ -25,34 +25,47 @@ namespace Order.Controllers
         }
 
         // GET: OrderItemController/Create
+        [HttpGet]
         public IActionResult CreateOrderItem(int orderId)
         {
             var order = db.Orders.Find(orderId);
-            Console.WriteLine("klldslkvlsdvl");
             if (order == null)
             {
                 return NotFound();
             }
-            //OrderItem item = new OrderItem();
-            //item.OrderId = order.Id;
-            return View();
+            var item = new OrderItem();
+            item.OrderId = orderId;
+            return View(item);
         }
-
-
-        // POST: OrderItemController/Create
-        [HttpPost] 
+        [HttpPost]
         public IActionResult CreateOrderItem(OrderItem orderItem)
         {
-            
-            db.OrderItems.Add(orderItem);
-            db.SaveChanges();
-            return RedirectToAction("Show");
+            if (db.Orders.Any(o => o.Id == orderItem.OrderId))
+            {
+                if (db.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId && oi.Name == orderItem.Name))
+                {
+                    ModelState.AddModelError("", "Name не может быть равен Number заказа.");
+                }
+
+                var order = new OrderItem
+                {
+                    Name = orderItem.Name,
+                    Quantity = orderItem.Quantity,
+                    Unit = orderItem.Unit,
+                    OrderId = orderItem.OrderId
+                };
+                db.OrderItems.Add(orderItem);
+                db.SaveChanges();
+                return RedirectToAction("Show", new { id = orderItem.OrderId });
+            }
+            else
+            {
+                return NotFound();
+            }
+
         }
 
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+
 
         public IActionResult Show(int id)
         {
