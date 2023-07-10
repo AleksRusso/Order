@@ -12,7 +12,7 @@ using Order.Models;
 namespace Order.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230709174731_Begin")]
+    [Migration("20230710070049_Begin")]
     partial class Begin
     {
         /// <inheritdoc />
