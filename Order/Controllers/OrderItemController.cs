@@ -40,27 +40,46 @@ namespace Order.Controllers
         [HttpPost]
         public IActionResult CreateOrderItem(OrderItem orderItem)
         {
-            if (db.Orders.Any(o => o.Id == orderItem.OrderId))
+            try
             {
-                if (db.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId && oi.Name == orderItem.Name))
-                {
-                    ModelState.AddModelError("", "Name не может быть равен Number заказа.");
-                }
 
-                var order = new OrderItem
+                if (db.Orders.Any(o => o.Id == orderItem.OrderId))
                 {
-                    Name = orderItem.Name,
-                    Quantity = orderItem.Quantity,
-                    Unit = orderItem.Unit,
-                    OrderId = orderItem.OrderId
-                };
-                db.OrderItems.Add(orderItem);
-                db.SaveChanges();
-                return RedirectToAction("Show", new { id = orderItem.OrderId });
+
+                    var or = db.Orders.Find(orderItem.OrderId);
+                    if (or != null && or.Number == orderItem.Name)
+                    {
+                        ModelState.AddModelError("", "Name не может быть равен Number заказа.");
+                        return View(orderItem);
+                    }
+                    else if (db.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId && oi.Name == orderItem.Name))
+                    {
+                        ModelState.AddModelError("", "Такое Name уже существует в этом заказе.");
+                        return View(orderItem);
+                    }
+                    else 
+                    {
+                        var order = new OrderItem
+                        {
+                            Name = orderItem.Name,
+                            Quantity = orderItem.Quantity,
+                            Unit = orderItem.Unit,
+                            OrderId = orderItem.OrderId
+                        };
+                        db.OrderItems.Add(orderItem);
+                        db.SaveChanges();
+                        return RedirectToAction("Show", new { id = orderItem.OrderId });
+                    }
+                    //return View(orderItem);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
+            catch (Exception)
             {
-                return NotFound();
+                return View(orderItem);
             }
 
         }
@@ -75,7 +94,7 @@ namespace Order.Controllers
         }
 
 
-
+        [HttpGet]
         // GET: OrderItemController/Edit/5
         public IActionResult Edit(int id)
         {
@@ -89,16 +108,32 @@ namespace Order.Controllers
 
         // POST: OrderItemController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Edit(OrderItem orderItem)
         {
-            if (ModelState.IsValid)
+            if (db.Orders.Any(o => o.Id == orderItem.OrderId))
             {
+                if (db.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId && oi.Name == orderItem.Name))
+                {
+                    ModelState.AddModelError("", "Такое Name уже существует в этом заказе.");
+                    return View(orderItem);
+
+                }
+                var or = db.Orders.Find(orderItem.OrderId);
+                if (or != null && or.Number == orderItem.Name)
+
+                {
+                    ModelState.AddModelError("", "Name не может быть равен Number заказа.");
+                    return View(orderItem);
+                }
+
                 db.OrderItems.Update(orderItem);
                 db.SaveChanges();
-                return RedirectToAction("Show");
+                return RedirectToAction("Show", new { id = orderItem.OrderId });
             }
-            return View(orderItem);
+            else
+            {
+                return NotFound();
+            }
         }
 
         // GET: OrderItemController/Delete/5
@@ -110,10 +145,10 @@ namespace Order.Controllers
             {
                 return NotFound();
             }
-
+            var orderId = orderItem.OrderId;
             db.OrderItems.Remove(orderItem);
             db.SaveChanges();
-            return RedirectToAction("Show");
+            return RedirectToAction("Show", new { id = orderId });
         }
 
     }

@@ -1,4 +1,4 @@
-﻿@model Orders
+﻿@model Orders   
 
 <h2>Новый заказ</h2>
 
@@ -16,6 +16,7 @@
     <div >
         <label name="Number">Number</label>
         <input type="text" class="form-control" asp-for="Number" />
+        <span asp-validation-for="Number" class="text-danger"></span>
     </div>
     <br />
     

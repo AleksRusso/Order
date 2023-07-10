@@ -41,18 +41,28 @@ namespace Order.Controllers
             var providerFilters = new SelectList(db.Providers, "Id", "Name");
             ViewBag.Providers = providerFilters;
 
-            if (db.Orders.Any(o => o.Number == order.Number && o.ProviderId == order.ProviderId))
+            try
             {
-                ModelState.AddModelError("", "Заказ с указанным номером и поставщиком уже существует.");
-                return View(order);
-            }
-            else
-            {
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                if (db.Orders.Any(o => o.Number == order.Number && o.ProviderId == order.ProviderId))
+                {
+                    ModelState.AddModelError("", "Заказ с указанным номером и поставщиком уже существует.");
+                    return View(order);
+                }
+                else
+                {
+                    db.Orders.Add(order);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
 
             }
+            catch (Exception)
+            {
+                return View(order);
+            }
+                
+           
+           
         }
 
         // GET: OrderController/Edit/5

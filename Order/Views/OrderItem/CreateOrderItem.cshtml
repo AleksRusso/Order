@@ -5,22 +5,22 @@
 <form asp-controller="OrderItem" asp-action="CreateOrderItem" method="post">
     <input type="hidden" asp-for="OrderId" />
 
-
+      <div class="validation-summary-errors text-danger" asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="Name">Name</label>
-        <input type="text" class="form-control" asp-for="Name" />
+        <input type="text" class="form-control" asp-for="Name" value=""/>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <br />
     <div>
         <label asp-for="Quantity">Quantity</label>
-        <input type="text" class="form-control" asp-for="Quantity"/>
+        <input type="text" class="form-control" asp-for="Quantity" value=""/>
         <span asp-validation-for="Quantity" class="text-danger"></span>
     </div>
     <br />
     <div>
         <label asp-for="Unit">Unit</label>
-        <input type="text" class="form-control" asp-for="Unit">
+        <input type="text" class="form-control" asp-for="Unit" value="">
         <span asp-validation-for="Unit" class="text-danger"></span>
     </div>
     <br />

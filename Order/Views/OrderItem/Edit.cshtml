@@ -3,8 +3,8 @@
 
 
 <form asp-controller="OrderItem" asp-action="Edit" method="post" >
-   
-
+     <input type="hidden" asp-for="OrderId" />
+    <div class="validation-summary-errors text-danger" asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="Name">Name</label>
         <input type="text" class="form-control" asp-for="Name" value="@Model.Name" />
