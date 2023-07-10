@@ -72,49 +72,6 @@ namespace Order.Controllers
                 return NotFound();
             }
 
-
-            //try
-            //{
-
-            //    if (db.Orders.Any(o => o.Id == orderItem.OrderId))
-            //    {
-
-            //        var or = db.Orders.Find(orderItem.OrderId);
-            //        if (or != null && or.Number == orderItem.Name)
-            //        {
-            //            ModelState.AddModelError("", "Name не может быть равен Number заказа.");
-            //            return View(orderItem);
-            //        }
-            //        else if (db.OrderItems.Any(oi => oi.OrderId == orderItem.OrderId && oi.Name == orderItem.Name))
-            //        {
-            //            ModelState.AddModelError("", "Такое Name уже существует в этом заказе.");
-            //            return View(orderItem);
-            //        }
-            //        else 
-            //        {
-            //            var order = new OrderItem
-            //            {
-            //                Name = orderItem.Name,
-            //                Quantity = orderItem.Quantity,
-            //                Unit = orderItem.Unit,
-            //                OrderId = orderItem.OrderId
-            //            };
-            //            db.OrderItems.Add(orderItem);
-            //            db.SaveChanges();
-            //            return RedirectToAction("Show", new { id = orderItem.OrderId });
-            //        }
-            //        //return View(orderItem);
-            //    }
-            //    else
-            //    {
-            //        return NotFound();
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    return View(orderItem);
-            //}
-
         }
 
 
